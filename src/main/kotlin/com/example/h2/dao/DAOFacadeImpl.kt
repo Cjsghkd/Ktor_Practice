@@ -3,10 +3,7 @@ package com.example.h2.dao
 import com.example.h2.dao.DatabaseFactory.dbQuery
 import com.example.h2.models.Article
 import com.example.h2.models.Articles
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 
 class DAOFacadeImpl: DAOFacade {
     private fun resultRowToArticle(row: ResultRow) = Article(
@@ -34,8 +31,11 @@ class DAOFacadeImpl: DAOFacade {
         insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToArticle)
     }
 
-    override suspend fun editArticle(id: Int, title: String, body: String): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun editArticle(id: Int, title: String, body: String): Boolean = dbQuery {
+        Articles.update({ Articles.id eq id }) {
+            it[Articles.title] = title
+            it[Articles.body] = body
+        } > 0
     }
 
     override suspend fun deleteArticle(id: Int): Boolean {

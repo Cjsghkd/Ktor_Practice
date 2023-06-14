@@ -1,7 +1,9 @@
 package com.example.h2.models
 
+import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.*
 
+@Serializable
 data class Article(
     val id: Int,
     val title: String,

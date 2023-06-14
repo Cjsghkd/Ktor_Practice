@@ -11,7 +11,12 @@ object DatabaseFactory {
     fun init() {
         val driverClassName = "org.h2.Driver"
         val jdbcURL = "jdbc:h2:~/ktor_practice"
-        val database = Database.connect(jdbcURL, driverClassName)
+        val database = Database.connect(
+            url = jdbcURL,
+            driver = driverClassName,
+            user = "sa",
+            password = ""
+        )
         transaction(database) {
             SchemaUtils.create(Articles)
         }

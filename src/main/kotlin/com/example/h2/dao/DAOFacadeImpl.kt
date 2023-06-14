@@ -4,6 +4,7 @@ import com.example.h2.dao.DatabaseFactory.dbQuery
 import com.example.h2.models.Article
 import com.example.h2.models.Articles
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 
@@ -25,8 +26,12 @@ class DAOFacadeImpl: DAOFacade {
             .singleOrNull()
     }
 
-    override suspend fun addNewArticle(title: String, body: String): Article? {
-        TODO("Not yet implemented")
+    override suspend fun addNewArticle(title: String, body: String): Article? = dbQuery {
+        val insertStatement = Articles.insert {
+            it[Articles.title] = title
+            it[Articles.body] = body
+        }
+        insertStatement.resultedValues?.singleOrNull()?.let(::resultRowToArticle)
     }
 
     override suspend fun editArticle(id: Int, title: String, body: String): Boolean {

@@ -4,6 +4,7 @@ import com.example.h2.dao.DatabaseFactory.dbQuery
 import com.example.h2.models.Article
 import com.example.h2.models.Articles
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class DAOFacadeImpl: DAOFacade {
     private fun resultRowToArticle(row: ResultRow) = Article(
@@ -38,7 +39,7 @@ class DAOFacadeImpl: DAOFacade {
         } > 0
     }
 
-    override suspend fun deleteArticle(id: Int): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun deleteArticle(id: Int): Boolean = dbQuery {
+        Articles.deleteWhere { Articles.id eq id } > 0
     }
 }
